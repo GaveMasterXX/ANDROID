@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="task_title_hint">Titulo da Tarefa</string>
+    <string name="task_description_hint">Descrição da Tarefa</string>
+    <string name="create_task_button">Criar Tarefa</string>
+    <string name="form_task_activity_label">Criar Nova Tarefa</string>
+</resources>
