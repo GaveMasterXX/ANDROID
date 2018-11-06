@@ -37,12 +37,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        List<Contact> allContacts = ChatDatabase.getInstance(this).contactosDao().getAllContacts();
+        List<Contact> allContacts = ChatDatabase.getInstance(this).contactsDao().getAllContacts();
         this.adpter.setData(allContacts);
     }
 
     public void addNewMessageOnCliked(View view) {
+        NewContactActivity.start(this);
+
     }
+
 
     public class ChatViewHolder extends RecyclerView.ViewHolder {
         private TextView name;

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         private void delete(int position){
-            Task task = ;
+            Task task;
         }
 
         @NonNull

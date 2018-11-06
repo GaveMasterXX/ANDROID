@@ -29,6 +29,6 @@ public abstract class ChatDatabase extends RoomDatabase {
         return instance;
     }
 
-    public abstract ContactDao contactosDao();
+    public abstract ContactDao contactsDao();
     public abstract MessageDao messageDao();
 }
