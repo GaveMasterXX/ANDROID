@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private ChatAdpter adpter;
+    private long id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +47,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void openChatOnClicked(View view) {
+       ChatActivity.start(this, id);
+    }
 
-    public class ChatViewHolder extends RecyclerView.ViewHolder {
+
+
+    public class ChatViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView name;
         private TextView text;
         private TextView date;
 
         public ChatViewHolder(@NonNull View view) {
             super(view);
+            view.setOnClickListener(this);
+
             this.name = view.findViewById(R.id.chat_name);
             this.text = view.findViewById(R.id.chat_last_text);
             this.date = view.findViewById(R.id.chat_date);
@@ -62,8 +70,20 @@ public class MainActivity extends AppCompatActivity {
         public void bind(Contact contact){
             this.name.setText(contact.getName());
 
+
+            int pos = getAdapterPosition();
+            id = contact.getId();
+            System.out.println("try to find id in this " + id+"and pos "+pos);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            startchatActivity(contact);
         }
     }
+
+
 
 
     public class ChatAdpter extends RecyclerView.Adapter<ChatViewHolder>{
