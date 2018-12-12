@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PillsRe</string>
+
+    <string-array name="hours">
+        <item>1 vez por dia</item>
+        <item>2 vez por dia</item>
+        <item>3 vez por dia</item>
+    </string-array>
+</resources>

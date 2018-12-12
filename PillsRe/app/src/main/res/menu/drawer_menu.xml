@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group>
+        <item android:id="@+id/nav_today"
+            android:icon="@drawable/ic_merda"
+            android:title="Hoje" />
+
+        <item android:id="@+id/nav_myPills"
+            android:icon="@drawable/ic_merda"
+            android:title="Meus Comprimidos" />
+
+        <item android:id="@+id/nav_addPills"
+            android:icon="@drawable/ic_merda"
+            android:title="Adicionar Comprimidos" />
+
+        <item android:id="@+id/nav_definitions"
+            android:icon="@drawable/ic_merda"
+            android:title="Definições" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_contacts"
+                android:icon="@drawable/ic_merda"
+                android:title="Contactos" />
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_merda"
+                android:title="Ajuda" />
+        </menu>
+    </item>
+
+</menu>
