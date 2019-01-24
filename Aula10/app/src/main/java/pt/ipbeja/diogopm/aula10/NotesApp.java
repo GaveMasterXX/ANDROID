@@ -12,7 +12,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.List;
 
 import pt.ipbeja.diogopm.aula10.data.Note;
-import pt.ipbeja.diogopm.aula10.data.NoteDatabase;
 
 public class NotesApp extends Application {
     @Override

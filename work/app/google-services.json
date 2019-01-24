@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "784256162003",
+    "firebase_url": "https://healfbox.firebaseio.com",
+    "project_id": "healfbox",
+    "storage_bucket": "healfbox.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784256162003:android:d7554ba2a011b873",
+        "android_client_info": {
+          "package_name": "pdm.ipbeja.pt.work"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "784256162003-b65d9v1ve8jg1nsq2uu5iiqcncn4keof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEKoqJOKPyFRAlDBMj7EQ8reonORzw_7k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

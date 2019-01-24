@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group>
+        <item android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black"
+            android:title="Menu Inicail" />
+
+        <item
+            android:id="@+id/nav_myPills"
+            android:icon="@drawable/ic_assignmen"
+            android:title="Meus Comprimidos" />
+
+        <item
+            android:id="@+id/nav_addPills"
+            android:icon="@drawable/ic_add_circle"
+            android:title="Adicionar Comprimidos" />
+
+        <item
+            android:id="@+id/nav_pharmacy"
+            android:icon="@drawable/ic_pin_drop"
+            android:title="Farmacias" />
+
+        <item android:id="@+id/nav_definitions"
+            android:icon="@drawable/ic_settings_black"
+            android:title="Definições" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_contacts"
+                android:icon="@drawable/ic_perm_contact"
+                android:title="Contactos" />
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_help_outline"
+                android:title="Ajuda" />
+        </menu>
+    </item>
+
+</menu>

@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">work</string>
     <string name="action_settings">Settings</string>
+    <string-array name="hours">
+        <item>1 vez por dia</item>
+        <item>2 vez por dia</item>
+        <item>3 vez por dia</item>
+    </string-array>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_detail_meds">DetailMedsActivity</string>
 </resources>

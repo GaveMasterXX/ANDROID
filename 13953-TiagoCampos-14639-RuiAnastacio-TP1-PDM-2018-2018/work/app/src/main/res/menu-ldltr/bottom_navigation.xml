@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/bot_home"
+            android:icon="@drawable/ic_home_black"
+            android:title="Página Inicail"
+            app:showAsAction="always" />
+
+        <item
+            android:id="@+id/bot_add"
+            android:title=""/>
+
+        <item
+            android:id="@+id/bot_medicine"
+            android:icon="@drawable/ic_assignmen"
+            android:title="Meus Remédios"
+            app:showAsAction="always" />
+    </group>
+</menu>

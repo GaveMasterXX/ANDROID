@@ -3,6 +3,7 @@ package pdm.ipbeja.pt.work;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -54,27 +55,12 @@ public class MyMedicinesActivity extends AppCompatActivity {
 
         my_meds.setAdapter(medicinesAdpter);
         my_meds.setLayoutManager(linearLayoutManager);
-        createMedicine();
+      //  createMedicine();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        List<Medicines> medicines = HealthBoxDatabase.getInstance(this).medicinesDao().getMedicines();
-        medicinesAdpter.setData(medicines);
-
-    }
-
-    public void createMedicine() {
-      String name = "Cgripo";
-      String typeMed = "Compremido";
-      String dayStart ="7";
-      String monthStart = "12";
-      String yearStart = "2018";
-      String daysOfTake = "6";
-
-        // Mesmo que não exista foto, não há problema em guardar null no campo dos bytes! Tratamos o caso de ser null quando utilizarmos a foto
-        HealthBoxDatabase.getInstance(this).medicinesDao().insert(new Medicines( 0, name,typeMed , dayStart, monthStart, yearStart, daysOfTake));
         List<Medicines> medicines = HealthBoxDatabase.getInstance(this).medicinesDao().getMedicines();
         medicinesAdpter.setData(medicines);
 
@@ -99,7 +85,10 @@ public class MyMedicinesActivity extends AppCompatActivity {
         private void bind(Medicines medicines){
             this.medicines = medicines;
             textView.setText(medicines.getName());
-            imageView.setImageResource(R.drawable.ic_arrow_back);
+            String typeMed =  medicines.getTypeMed();
+            if(typeMed.equals("capsule")){
+                imageView.setImageResource(R.drawable.caplpsule);
+            }
 
             //TODO FAZER A PARTE DO TIPO DE MEDICAMENTO E A IMAGEM CORRESPONDENTE A CADA UM
 
@@ -108,6 +97,7 @@ public class MyMedicinesActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             //TODO click curto, faz algo
+
 
         }
 
@@ -145,5 +135,9 @@ public class MyMedicinesActivity extends AppCompatActivity {
         public int getItemCount() {
             return data.size();
         }
+    }
+
+    public void openDetalisOnClicked(View view){
+        MedsDetailsActivity.start(this);
     }
 }

@@ -5,11 +5,14 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(tableName = "historicLog", foreignKeys = @ForeignKey( entity = Medicines.class, parentColumns = "idMed", childColumns = "idMeds", onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE))
+@Entity(tableName = "historicLog",
+        foreignKeys = @ForeignKey( entity = Medicines.class, parentColumns = "idMed", childColumns = "idMeds",
+        onDelete = ForeignKey.CASCADE))
 public class HistoricLog {
 
     @PrimaryKey(autoGenerate = true)
     private long idLog;
+
     private long idMeds;
     private String hourLog;
     private String dayLog;
@@ -79,7 +82,10 @@ public class HistoricLog {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus( String status) {
         this.status = status;
+    }
+
+    public void updateStatus(long idLog, String tomado, long idMed) {
     }
 }

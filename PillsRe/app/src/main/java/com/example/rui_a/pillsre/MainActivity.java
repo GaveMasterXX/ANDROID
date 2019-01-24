@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Log.d(TAG, "onCreate: started.");
         initImageBitmaps();
+
+
 
 
 
@@ -127,6 +131,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+
+
     //To open the Side Bar
     public void onBackPressed(View view) {
         drawer.openDrawer(GravityCompat.START);
@@ -142,6 +148,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_myPills:
                 startActivity(new Intent(MainActivity.this, AddmedicinesActivity.class));
                 break;
+
+            case R.id.nav_addPills:
+                startActivity(new Intent(MainActivity.this, MapsActivity.class));
+                break;
+
 
                 /*
             case R.id.nav_addPills:
@@ -164,4 +175,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onClickAddMedicine(View view) {
         startActivity(new Intent(MainActivity.this, AddmedicinesActivity.class));
     }
+
 }

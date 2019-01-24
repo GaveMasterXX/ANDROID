@@ -8,6 +8,7 @@ public class Medicines {
 
     @PrimaryKey(autoGenerate = true)
     private long idMed;
+
     private String name;
     private String typeMed;
     private String dayStart;

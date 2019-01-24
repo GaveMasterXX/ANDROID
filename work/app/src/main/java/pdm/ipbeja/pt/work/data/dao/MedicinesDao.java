@@ -18,6 +18,6 @@ public interface MedicinesDao {
     List<Medicines>getMedicines();
 
     @Query("select * from medicines where idMed = :idMed")
-    Medicines getMedicines(long idMed);
+    Medicines getMedicinesById(long idMed);
 
 }
