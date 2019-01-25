@@ -5,16 +5,27 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v13.view.DragStartHelper;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
@@ -25,9 +36,15 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -47,17 +64,34 @@ public class AddmedicinesActivity extends AppCompatActivity implements TimePicke
     private TextView argPicker;
 
     final TextView[] myTextViews = new TextView[N]; // create an empty array;
-
+    ArrayList<String> alist=new ArrayList<String>();
     private int start = 0;
+
 
     //To BD
     private String numberOfDays;
     private String medicineName;
+
+    //camara //TODO
+    String currentImagePath = null;
+    private static final int IMAGE_REQUEST = 1888;
+    ImageView imageView;
+    private File imageFile;
+    private Intent cameraIntent;
+    private Bitmap bitmap;
+    private File file;
+    private File storageDir;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addmedicines);
 
+
+        alist.add("00:00");
+        alist.add("00:00");
+        alist.add("00:10");
 
 
 
@@ -71,13 +105,16 @@ public class AddmedicinesActivity extends AppCompatActivity implements TimePicke
         spinner.setAdapter(adapter);
 
         numberText = (TextView) findViewById(R.id.numberPicker);
-        timeText = (TextView) findViewById(R.id.name_time);
+        timeText = (TextView) findViewById(R.id.time);
         medicineNameText = (TextView)  findViewById(R.id.medicineName);
         layout = (LinearLayout) findViewById(R.id.layout);
 
 
         settingAlarm();
-        cancelAlarm();
+        //cancelAlarm();
+
+        //camara //TODO
+        imageView = findViewById(R.id.imageView);
     }
 
     @Override
@@ -94,6 +131,16 @@ public class AddmedicinesActivity extends AppCompatActivity implements TimePicke
                 //Toast.makeText(AddmedicinesActivity.this, splitStr[0], Toast.LENGTH_SHORT).show();
                 numberselect = Integer.parseInt(splitStr[0]);
                 // myTextViews = new TextView[N];
+
+                alist.clear();
+                if(start > 0){
+                    for (int i = 0; i < numberselect; i++) {
+                        String s = myTextViews[i].getText().toString();
+                        alist.add(s);
+                        start ++;
+                    }
+                }
+
 
                 layout.removeAllViews();
 
@@ -129,7 +176,13 @@ public class AddmedicinesActivity extends AppCompatActivity implements TimePicke
             rowTextView.setTextSize(18);
             rowTextView.setTextColor(Color.parseColor("#1E90FF"));
 
-            rowTextView.setText("00:00");
+            if (start == 0){
+                rowTextView.setText("00:00");
+            }
+            else {
+                String str= alist.get(i);
+                rowTextView.setText(str);
+            }
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(10,10,10,10);
@@ -220,12 +273,12 @@ public class AddmedicinesActivity extends AppCompatActivity implements TimePicke
     public void settingAlarm(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 10);
-        calendar.set(Calendar.MINUTE, 01);
+        calendar.set(Calendar.HOUR_OF_DAY, 13);
+        calendar.set(Calendar.MINUTE, 41);
 
         Intent myIntent = new Intent(getApplicationContext(), NotificationHelper.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                getApplicationContext(), 1, myIntent,
+                getApplicationContext(), 120, myIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -244,4 +297,99 @@ public class AddmedicinesActivity extends AppCompatActivity implements TimePicke
 
         alarmManager.cancel(pendingIntent);
     }
+
+    //TODO
+    /**
+     *
+     * @param view
+     */
+    public void onClickTakePhoto(View view) {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if(cameraIntent.resolveActivity(getPackageManager()) != null)
+        {
+            //Variável que guarda o caminho da fotografia
+            File imageFile = null;
+
+            try {
+                //Vai buscar o caminho para guardar a fotografia
+                imageFile = getImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if(imageFile != null){
+                //Dá permissões para guardar dentro da pasta da aplicação
+                Uri imageUri = FileProvider.getUriForFile(this, "com.example.android.fileprovider", imageFile);
+                //Guarda a foto
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(cameraIntent, IMAGE_REQUEST);
+            }
+
+        }
+    }
+
+
+    /**
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) { //TODO
+        if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK) {
+
+
+            Bitmap mphoto = BitmapFactory.decodeFile(currentImagePath);
+            Bitmap thumbnail = ThumbnailUtils.extractThumbnail(mphoto,120,120);
+
+            //Roda a Thumbnail para colocar na ImageView
+            Bitmap rotatedThumbnail = rotateBitmap(90, thumbnail);
+
+            //Põe o Thumbnail na ImageView
+            imageView.setImageBitmap(rotatedThumbnail);
+        }
+    }
+
+
+    /**
+     *
+     * @param degrees
+     * @param thumbnail
+     * @return
+     */
+    private static Bitmap rotateBitmap(int degrees, Bitmap thumbnail) { //TODO
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degrees);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(thumbnail, 120, 120, true);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+        return rotatedBitmap;
+
+    }
+
+    private File getImageFile() throws IOException //TODO
+    {
+        //Elimina a fotografia temporaria
+        if (currentImagePath != null){
+            File fileDel = new File(currentImagePath);
+            boolean deleted = fileDel.delete();
+        }
+
+
+        //Vai buscar o caminho para guardar a imagem
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+
+        //Define o nome do ficheiro
+        File imageFile = File.createTempFile("pill",".jpg", storageDir);
+
+        currentImagePath = imageFile.getAbsolutePath();
+        //File imageFile = new File(storageDir, "ola.jpg");
+        String ola = imageFile.getAbsolutePath();
+
+        Log.d("myTag", imageFile.getAbsolutePath());
+        return imageFile;
+    }
+
+
 }

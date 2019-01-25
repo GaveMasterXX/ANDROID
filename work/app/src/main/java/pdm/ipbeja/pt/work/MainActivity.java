@@ -3,7 +3,10 @@ package pdm.ipbeja.pt.work;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -13,10 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +24,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import pdm.ipbeja.pt.work.data.db.HealthBoxDatabase;
-import pdm.ipbeja.pt.work.data.entity.HistoricLog;
-import pdm.ipbeja.pt.work.data.entity.Medicines;
 import pdm.ipbeja.pt.work.data.entity.Meds;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DatePickerDialog.OnDateSetListener {
@@ -80,8 +78,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         main_recylcle_view.setLayoutManager(linearLayoutManager);
 
 
-
-
         //Side Bar
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -96,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dateText.setText(day + " " + abbreviatedMonth);
 
         this.yearToday = c.get(Calendar.YEAR);
-        this.monthToday = c.get(Calendar.MONTH)  + 1;
+        this.monthToday = c.get(Calendar.MONTH) + 1;
         this.dayToday = c.get(Calendar.DAY_OF_MONTH);
 
     }
@@ -117,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String currenDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
 
         this.yearToday = year;
-        this.monthToday = month  + 1;
+        this.monthToday = month + 1;
         this.dayToday = dayOfMonth;
 
         dateText.setText(currenDateString);
@@ -125,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * chama o fragmento que permite escolher a data pertendida
+     *
      * @param view
      */
     public void onClickDatePicker(View view) {
@@ -135,12 +132,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * Abre a SideBar
+     *
      * @param view
      */
     public void onBackPressed(View view) {
         drawer.openDrawer(GravityCompat.START);
     }
-
 
 
     @Override
@@ -171,21 +168,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * Este metodo vai para o formulario que adiciona um novo medicamento a base de dados
+     *
      * @param view
      */
     public void onClickAddMedicine(View view) {
-       InsertMenuActivity.start(this);
+        InsertMenuActivity.start(this);
     }
 
 
+    class MainViewHolder extends RecyclerView.ViewHolder {
+        Meds meds;
 
-    class MainViewHolder extends RecyclerView.ViewHolder{
-         Meds meds;
-
-         final ImageView imageView;
-         final TextView hours_take;
-         final TextView name_pills;
-         final Button taken_btn;
+        final ImageView imageView;
+        final TextView hours_take;
+        final TextView name_pills;
+        final Button taken_btn;
 
         public MainViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -195,13 +192,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             taken_btn = itemView.findViewById(R.id.taken_button);
 
 
-
-
             taken_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    //HealthBoxDatabase.getInstance(this).medsDao().updateStatus(meds.getIdMed(),true);
+                  //  HealthBoxDatabase.getInstance(this).medsDao().updateStatus(meds.getIdMed(),true);
                     taken_btn.setText("tomado");
 
                     System.out.println("Button as been cliked!!!");
@@ -211,7 +206,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         /**
-         *o bind prencher o layot que esta no recycleVeiw
+         * o bind prencher o layot que esta no recycleVeiw
+         *
          * @param meds
          */
         public void bind(Meds meds) {
@@ -219,26 +215,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             name_pills.setText(meds.getName());
 
             //Verificar se os compremidos foram tomados
-            if(meds.isStatus() == false) {
+            if (meds.isStatus() == false) {
                 taken_btn.setText("Tomar");
 
-            }else if(meds.isStatus() == true){
+            } else if (meds.isStatus() == true) {
                 taken_btn.setText("Tomado");
             }
 
             //TODO ADDICIONAR CODIGO PARA IR BUSCAR A FOTO A PASTA DA APP QUE ESTA NA CACHE DO TELEFONE
+           String imageURL = meds.getImageURL();
+            Bitmap mphoto = BitmapFactory.decodeFile(imageURL);
+            Bitmap thumbnail = ThumbnailUtils.extractThumbnail(mphoto,80,80);
+
+            imageView.setImageBitmap(thumbnail);
+
+
+
 
 
         }//end method Bind
     }
 
+    private static Bitmap rotateBitmap(int degrees, Bitmap thumbnail) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degrees);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(thumbnail, 120, 120, true);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+        return rotatedBitmap;
+
+    }
+
     /**
      *
      */
-    public class MainAdpter extends  RecyclerView.Adapter<MainViewHolder>{
+    public class MainAdpter extends RecyclerView.Adapter<MainViewHolder> {
         private List<Meds> data = new ArrayList<>();
 
-        private void setData(List<Meds> data){
+        private void setData(List<Meds> data) {
             this.data = data;
 
             notifyDataSetChanged();
@@ -262,9 +275,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public int getItemCount() {
             return data.size();
         }
-    }
-
-
     }
 
 }

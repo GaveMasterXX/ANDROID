@@ -2,8 +2,11 @@ package pdm.ipbeja.pt.work;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ThumbnailUtils;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,12 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pdm.ipbeja.pt.work.data.db.HealthBoxDatabase;
-import pdm.ipbeja.pt.work.data.entity.Medicines;
+import pdm.ipbeja.pt.work.data.entity.Meds;
 
 public class MyMedicinesActivity extends AppCompatActivity {
 
-    public static final String MEDICINE_ID = "idMeds";
-    private long medicineId;
 
     private RecyclerView my_meds;
     private MedicinesAdpter medicinesAdpter;
@@ -41,8 +42,6 @@ public class MyMedicinesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_medicines);
-
-        medicineId = getIntent().getLongExtra(MEDICINE_ID, 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -61,14 +60,14 @@ public class MyMedicinesActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        List<Medicines> medicines = HealthBoxDatabase.getInstance(this).medicinesDao().getMedicines();
-        medicinesAdpter.setData(medicines);
+        List<Meds> meds = HealthBoxDatabase.getInstance(this).medsDao().getAllMedicines();
+        medicinesAdpter.setData(meds);
 
     }
 
 
     class MedicinesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
-       Medicines medicines;
+       Meds meds;
 
        final TextView textView;
        final ImageView imageView;
@@ -82,15 +81,24 @@ public class MyMedicinesActivity extends AppCompatActivity {
             imageView = itemView.findViewById(R.id.imageMed);
         }
 
-        private void bind(Medicines medicines){
-            this.medicines = medicines;
-            textView.setText(medicines.getName());
-            String typeMed =  medicines.getTypeMed();
-            if(typeMed.equals("capsule")){
-                imageView.setImageResource(R.drawable.caplpsule);
-            }
+        private void bind(Meds Meds){
+            this.meds = meds;
+            textView.setText(meds.getName());
+
+
 
             //TODO FAZER A PARTE DO TIPO DE MEDICAMENTO E A IMAGEM CORRESPONDENTE A CADA UM
+
+
+            Bitmap mphoto = BitmapFactory.decodeFile(meds.getImageURL());
+            Bitmap thumbnail = ThumbnailUtils.extractThumbnail(mphoto,120,120);
+
+            //Roda a Thumbnail para colocar na ImageView
+            //Bitmap rotatedThumbnail = rotateBitmap(90, thumbnail);
+
+            //Põe o Thumbnail na ImageView
+            imageView.setImageBitmap(thumbnail);
+
 
         }
 
@@ -108,11 +116,20 @@ public class MyMedicinesActivity extends AppCompatActivity {
         }
     }
 
+    private static Bitmap rotateBitmap(int degrees, Bitmap thumbnail) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degrees);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(thumbnail, 80, 80, true);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+        return rotatedBitmap;
+
+    }
+
 
     class MedicinesAdpter extends RecyclerView.Adapter<MedicinesViewHolder>{
-       private List<Medicines> data = new ArrayList<>();
+       private List<Meds> data = new ArrayList<>();
 
-       private void setData(List<Medicines> data){
+       private void setData(List<Meds> data){
            this.data = data;
            notifyDataSetChanged();
        }
@@ -126,8 +143,8 @@ public class MyMedicinesActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull MedicinesViewHolder medicinesViewHolder, int i) {
-            Medicines medicines = data.get(i);
-            medicinesViewHolder.bind(medicines);
+            Meds Meds = data.get(i);
+            medicinesViewHolder.bind(Meds);
 
         }
 

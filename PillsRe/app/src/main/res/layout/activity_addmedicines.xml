@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Lembretes"
+                    android:text=""
                     android:textColor="@android:color/background_dark"
                     android:textSize="18sp" />
 
@@ -79,14 +79,14 @@
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:id="@+id/name_time"
+                    android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:onClick="timePicker"
                     android:padding="10dp"
                     android:text="time"
                     android:textColor="@android:color/background_dark"
-                    android:textSize="18sp"
-                    android:onClick="timePicker"/>
+                    android:textSize="18sp" />
 
             <LinearLayout
                 android:id="@+id/layout"
@@ -144,6 +144,51 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:elevation="5dp"
+            android:layout_margin="3dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/name_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Foto do Comprimido"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="18sp" />
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/imageView"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/add_button" />
+
+                <Button
+                    android:id="@+id/takePhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:onClick="onClickTakePhoto"
+                    android:text="Tirar Foto" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>

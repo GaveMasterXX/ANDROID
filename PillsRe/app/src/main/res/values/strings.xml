@@ -7,4 +7,6 @@
         <item>3 vez por dia</item>
     </string-array>
     <string name="title_activity_maps">Map</string>
+
+    <string name="google_maps_key">AIzaSyAsYcO_C3QtmSDfflZB6XC1brn1w2nPGI0</string>
 </resources>

@@ -3,6 +3,7 @@ package com.example.rui_a.pillsre;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
@@ -10,17 +11,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -39,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //vars
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
-
 
 
     @Override
@@ -65,10 +69,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initImageBitmaps();
 
 
-
-
-
+        BottomNavigationView botomNav = findViewById(R.id.bottom_navigation);
+        botomNav.setOnNavigationItemSelectedListener(navListenner);
     }
+
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navListenner =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.bot_today:
+                            startActivity(new Intent(MainActivity.this, MypillsActivity.class));
+                            break;
+
+                        case R.id.bot_add:
+                            startActivity(new Intent(MainActivity.this, AddmedicinesActivity.class));
+                            break;
+
+                        case R.id.bot_medicine:
+                            startActivity(new Intent(MainActivity.this, MapsActivity.class));
+                            break;
+                    }
+                    return false;
+                }
+            };
+
 
 
     private void initImageBitmaps() {
@@ -120,9 +146,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
         String currenDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
 
-        //dateText.setText(currenDateString);
+
+
+        dateText.setText(currenDateString);
     }
 
     public void onClickDatePicker(View view) {
@@ -153,12 +182,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(MainActivity.this, MapsActivity.class));
                 break;
 
-
-                /*
-            case R.id.nav_addPills:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new ProfileFragment()).commit();
+            case R.id.nav_definitions:
+                startActivity(new Intent(MainActivity.this, LocationActivity.class));
                 break;
+                 /*
             case R.id.nav_definitions:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new ProfileFragment()).commit();
@@ -170,6 +197,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         return true;
     }
+
+
+
+
+
+
 
 
     public void onClickAddMedicine(View view) {

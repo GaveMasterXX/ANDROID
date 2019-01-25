@@ -47,16 +47,6 @@
                 android:textStyle="bold"
                 tools:text="Dec 25" />
 
-            <TextView
-                android:id="@+id/numberOfPills"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="40dp"
-                android:text="Falta tomar 3 comprimidos"
-                android:textSize="18sp"
-                android:textStyle="bold" />
         </RelativeLayout>
 
         <!---->
